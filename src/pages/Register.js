@@ -2,27 +2,29 @@ import React, { useState } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { useMutation, gql } from "@apollo/client";
 
-function Register() {
+import { useForm } from "../utils/hooks";
+
+function Register(props) {
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+
+  const initialState = {
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
-  });
-
-  const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
   };
+
+  const { onChange, onSubmit, values } = useForm(registerUser, initialState);
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(proxy, result) {
-      console.log(">>> useMutation: update");
+      console.log(">>> register.useMutation: update");
       console.log(result);
+      props.history.push("/");
     },
     // capture the potential errors coming from the graphql querry
     onError(err) {
-      console.log(">>> useMutation: onError");
+      console.log(">>> register.useMutation: onError");
       // IMPORTANT: problem is with accessing this thing below
       // console.log(">>> ", err);
       // console.log(">>> .graphQLErrors[0] ", err.graphQLErrors[0]);
@@ -34,10 +36,9 @@ function Register() {
     variables: values,
   });
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  function registerUser() {
     addUser();
-  };
+  }
 
   return (
     <div className="form-container">
@@ -49,6 +50,7 @@ function Register() {
           name="username"
           type="text"
           value={values.username}
+          error={errors.username ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -57,6 +59,7 @@ function Register() {
           name="email"
           type="email"
           value={values.email}
+          error={errors.email ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -65,6 +68,7 @@ function Register() {
           name="password"
           type="password"
           value={values.password}
+          error={errors.password ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -73,6 +77,7 @@ function Register() {
           name="confirmPassword"
           type="password"
           value={values.confirmPassword}
+          error={errors.confirmPassword ? true : false}
           onChange={onChange}
         />
         <Button type="submit" primary>
