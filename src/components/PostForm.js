@@ -17,6 +17,7 @@ function PostForm() {
       const data = proxy.readQuery({
         query: FETCH_POSTS_QUERY,
       });
+      // client.writeQuery causes rerender of components that request this data
       proxy.writeQuery({
         query: FETCH_POSTS_QUERY,
         data: {
