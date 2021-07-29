@@ -32,7 +32,6 @@ function PostCard({
         <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
           <Button color="blue" basic>
             <Icon name="comments" />
-            Like
           </Button>
           <Label basic color="blue" pointing="left">
             {commentCount}

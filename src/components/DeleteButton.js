@@ -3,7 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 
 import { Icon, Button, Confirm } from "semantic-ui-react";
 
-function DeleteButton({ postId }) {
+function DeleteButton({ postId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -11,6 +11,7 @@ function DeleteButton({ postId }) {
       setConfirmOpen(false);
       // TODO: remove post from cache such that the change is reflected
       // on the frontend without having to fetch the posts again
+      if (callback) callback();
     },
     variables: {
       postId,
